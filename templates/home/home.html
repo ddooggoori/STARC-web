@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        #main-image {
+            margin-top: 50px;
+        }
+        .button {
+            margin-top: 20px;
+            width: 240px; /* 너비 조정 */
+            height: 40px; /* 높이 조정 */
+            font-size: 18px; /* 글꼴 크기 조정 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img id="main-image" src="{{ url_for('static', filename='Logo.jpg') }}" alt="Main Image" width="300" height="300">
+        <div class="button-container">
+            <p>If you want a recommendation for statins...
+            <a href="/starc"><button class="button">Statin Recommendation 💊</button></a></p>
+        </div>
+        <div class="button-container">
+            <p>If you are curious about the similarity of drugs...
+            <a href="/similarity"><button class="button">Medication Similarity 🔍</button></a></p>
+        </div>
+        <div class="button-container">
+            <p>If you want to send feedback to the developer...
+            <a href="/survey"><button class="button">Survey 📰</button></a></p>
+        </div>
+    </div>
+</body>
+</html>

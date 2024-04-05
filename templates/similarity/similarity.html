@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statin Recommendation System 💊</title>
+    <style>
+        /* CSS Styles */
+        .header {
+            background-color: white;
+            border-bottom: 1px solid #000;
+            padding: 10px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #000;
+            margin-right: 20px;
+            font-size: 14pt;
+        }
+
+        .container1 {
+            display: flex;
+            margin-top: 80px;
+            justify-content: center;
+        }
+
+        .container2 {
+            display: flex;
+            margin-top: -10px;
+            margin-left: 450px;
+        }
+
+        .container3 {
+            display: flex;
+            margin-top: 20px;
+            margin-bottom: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+        }
+
+        .container4 {
+            display: flex;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+        }
+
+        .table-container {
+            width: 20%;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-left: 715px;
+            margin-right: auto;
+            table-layout: fixed;
+            justify-content: center;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 300px;
+            height: 35px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 18px; 
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+        }
+
+        .button-container button {
+            width: 300px;
+            height: 35px;
+            font-size: 16px;
+            text-align: center;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        hr {
+            border: none; 
+            border-top: 2px solid lightgray;
+            width: 80%; 
+        }
+
+        #loading {
+            text-align: left;
+            margin-top: 10px;
+        }
+      
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Medication Similarity Search System 🔍</h1>
+        <div>
+            <a href="/">Home 🏠</a>
+            <a href="/starc">Statin Recommendation 💊</a>
+            <a href="/survey">Survey 📰</a>
+        </div>
+    </div>
+
+    <div class="container1">
+        <h3>🛠️ Guidelines 🛠️</h3> 
+    </div>
+
+    <div class="container2">
+        <ul style="text-align: left;">
+            <li>The system is a search system that calculates the <a href="https://en.wikipedia.org/wiki/Chemical_similarity">Tanimoto similarity</a> between the medication obtained from the user <br>and the ECFP data obtained from <a href="https://go.drugbank.com/">Drugbank</a>, and recommends the top 5 medications with the highest similarity.</li>
+            <li>The medication you want to know about may not be in the database.</li>
+            <li>If it’s not, try searching for the medication name differently by referring to the following site. <a href="https://go.drugbank.com/drugs">Try clicking on me.</a></li>
+        </ul>
+    </div>  
+
+    <hr>
+
+    <div class="container3">
+    <form id="searchForm" action="/similarity" method="post">
+        <label for="drugInput">Enter the medication you want to search for similarity:</label><br> 
+        <input type="text" id="drugInput" name="drug"><br>
+        
+        <label for="radiusInput">Radius:</label><br>
+        <select id="radiusInput" name="radius">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select><br>
+        
+        <label for="nBitsInput">nBits:</label><br>
+        <input type="number" id="nBitsInput" name="nBits" value="1024"><br>
+        
+        <!-- Search button -->
+        <div class="button-container">
+            <button type="submit">Search 🔍</button>
+        </div>
+
+    <!-- Loading message -->
+    <div id="loading" style="display: none;">Calculating... Please wait.<br> Please do not press the Search 🔍 button again <br> until the results are displayed.</div>
+
+    </form>
+
+    <!-- Display the result dataframe here -->
+    <div id="result"></div>
+</div>
+
+<hr>
+<div class="container4">
+<div class="table-container">
+    {% if results is defined %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Medication</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in results.iterrows() %}
+                    <tr>
+                        <td>{{ row['Medication'] }}</td>
+                        <td>{{ row['Score'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    </div>
+</div>
+
+<script>
+    document.getElementById("searchForm").addEventListener("submit", function(event) {
+        var drugInput = document.getElementById("drugInput").value.trim();
+        var radiusInput = parseInt(document.getElementById("radiusInput").value);
+        var nBitsInput = parseInt(document.getElementById("nBitsInput").value);
+
+        if (drugInput === "") {
+            event.preventDefault();
+            alert("Please enter the name of the medication.");
+        } else if (radiusInput > 4 || nBitsInput > 2048) {
+            event.preventDefault();
+            alert("The maximum value for radius is 4 and for nBits is 2048.");
+        } else {
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("result").innerHTML = "";
+        }
+    });
+
+    {% if results is none %}
+        document.getElementById("result").innerHTML = "<p>Medication not found in the database.</p>";
+    {% endif %}
+
+
+    document.getElementById("searchForm").addEventListener("submit", function() {
+
+        document.getElementById("loading").style.display = "block"; // "Calculating... Please wait." 
+        document.getElementById("result").innerHTML = "";
+    });
+
+</script>
+</body>
+</html>
