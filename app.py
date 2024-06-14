@@ -8,7 +8,7 @@ import numpy as np
 from utils import *
 
 
-app = Flask(__name__, template_folder=r'STARC\templates')
+app = Flask(__name__, template_folder=r'E:\WORKING\STARC\templates')
 
 
 @app.route('/')
@@ -53,7 +53,6 @@ def starc_results():
 @app.route('/similarity', methods=['GET', 'POST'])
 def similarity():
     if request.method == 'POST':
-
         drug_name = request.form['drug']
         drug_name = drug_name.lower()
         radius = int(request.form['radius'])
@@ -78,6 +77,8 @@ def calculate():
     return render_template('calculate/calculate.html')
 
 
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
+
