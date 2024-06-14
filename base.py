@@ -82,7 +82,7 @@ def Scaling_for_validation(data1, *args, path):
     
 def Results(final_df, statin):    
     
-    model = joblib.load(r'E:\WORKING\SRS\Working\0205\Ezetimibe X\web\SRS_model.pkl')
+    model = joblib.load(r'utils/STARC_model.pkl')
     predic_proba = model.predict_proba(final_df)[:, 1] * 100
     predic_proba = pd.DataFrame(predic_proba, columns = ['Predictions'])
     results = pd.concat([statin, predic_proba], axis = 1)
