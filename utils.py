@@ -1,58 +1,8 @@
 import pandas as pd
-from rdkit import Chem
-from rdkit.Chem import AllChem
 import numpy as np
 import joblib
 from sklearn.preprocessing import StandardScaler
 import math
-
-def Medication_preprocessing(target, radius=2, nBits=1024):
-    
-    smiles = pd.read_csv(r'E:\WORKING\STARC\utils\smiles.csv')
-    
-    ecfp = {'Medication': [], 'ECFP': []}
-    for medication in smiles['name'].unique():
-        tmp = smiles[smiles['name'] == medication]
-        mol = Chem.MolFromSmiles(tmp['smiles'].values[0])
-        if mol:
-            fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius=radius, nBits=nBits)
-            fp_str = fp.ToBitString()
-            ecfp['Medication'].append(tmp['name'].values[0])
-            ecfp['ECFP'].append(fp_str)
-            
-    ecfp = pd.DataFrame(ecfp)
-    ecfp_tmp = ecfp['ECFP'].str.split('', expand=True)
-    
-    ecfp = pd.concat([ecfp, ecfp_tmp], axis=1).drop(['ECFP', 0, nBits+1], axis=1)
-
-    def tanimoto_similarity(vector1, vector2):
-        intersection = np.logical_and(vector1, vector2)
-        union = np.logical_or(vector1, vector2)
-        return intersection.sum() / float(union.sum())
-    
-    tanimoto_results = {'Medication': [], 'Score': []}
-    
-    vector1 = ecfp[ecfp['Medication'] == target].iloc[:, 1:].values.astype(int)
-       
-    for medication in ecfp['Medication'].unique():
-        if target != medication:
-            vector2 = ecfp[ecfp['Medication'] == medication].iloc[:, 1:].values.astype(int)
-            tmp = []
-            for a in vector1:
-                for n in vector2:
-                    similarity_tmp = tanimoto_similarity(a, n)
-                    tmp.append(similarity_tmp)
-            
-            similarity = np.mean(tmp)
-            
-            tanimoto_results['Medication'].append(medication)            
-            tanimoto_results['Score'].append(similarity)    
-
-    tanimoto_results = pd.DataFrame(tanimoto_results)
-    tanimoto_results = tanimoto_results.sort_values(by = ['Score'], ascending=False)
-    tanimoto_results = round(tanimoto_results, 3)
-    
-    return tanimoto_results.head(5)
 
 
 
