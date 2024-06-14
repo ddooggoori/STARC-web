@@ -224,15 +224,16 @@
         }
     });
 
+    // 결과가 없는 경우 에러 메시지 표시
     {% if results is none %}
         document.getElementById("result").innerHTML = "<p>Medication not found in the database.</p>";
     {% endif %}
 
-
+    // JavaScript 코드 추가
     document.getElementById("searchForm").addEventListener("submit", function() {
-
-        document.getElementById("loading").style.display = "block"; // "Calculating... Please wait." 
-        document.getElementById("result").innerHTML = "";
+        // 검색 버튼을 클릭하면 실행되는 함수
+        document.getElementById("loading").style.display = "block"; // "Calculating... Please wait." 메시지를 보이게 함
+        document.getElementById("result").innerHTML = ""; // 결과를 숨김
     });
 
 </script>
