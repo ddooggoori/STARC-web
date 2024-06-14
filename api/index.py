@@ -8,7 +8,7 @@ import numpy as np
 from utils import *
 
 
-app = Flask(__name__, template_folder=r'E:\WORKING\STARC\templates')
+app = Flask(__name__')
 
 
 @app.route('/')
