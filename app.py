@@ -50,31 +50,9 @@ def starc_results():
 
 
 
-@app.route('/similarity', methods=['GET', 'POST'])
-def similarity():
-    if request.method == 'POST':
-        drug_name = request.form['drug']
-        drug_name = drug_name.lower()
-        radius = int(request.form['radius'])
-        nBits = int(request.form['nBits'])
-
-        results = Medication_preprocessing(drug_name, radius, nBits)        
-        print(results) 
-
-        return render_template('similarity/similarity.html', results=results)
-    else:
-        return render_template('similarity/similarity.html')
-
-
-
 @app.route('/survey')
 def survey():
     return render_template('survey/survey.html')
-
-
-@app.route('/calculate')
-def calculate():
-    return render_template('calculate/calculate.html')
 
 
 
