@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statin Recommendation System 💊</title>
+    <style>
+        /* CSS Styles */
+        .header {
+            background-color: white;
+            border-bottom: 1px solid #000;
+            padding: 10px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #000;
+            margin-right: 20px;
+            font-size: 14pt;
+        }
+
+        .container1 {
+            display: flex;
+            margin-top: 80px;
+            justify-content: center;
+        }
+
+        .container2 {
+            display: flex;
+            margin-top: 0px;
+            margin-bottom: 30px;
+            margin-left: 450px;
+        }
+
+        .container3 {
+            display: flex;
+            margin-top: -40px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .table-container1 {
+            width: 30%;
+            margin-top: 10px;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .table-container2 {
+            margin-top: 0;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #000;
+            width: 40%;
+            border-radius: 5px;
+            overflow: hidden;
+            table-layout: fixed;
+            margin-bottom: 30px; 
+            margin-top: 15px; 
+            border-collapse: collapse;
+        }
+
+        .table-container2 hr {
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"] {
+            width: 80px;
+            text-align: center;
+        }
+
+        input[type="radio"] {
+            margin: 0 auto;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .button-container button {
+            padding: 15px 30px;
+            font-size: 16px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        hr {
+            border: none; 
+            border-top: 2px solid lightgray;
+            width: 80%; 
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Statin Recommendation System 💊</h1>
+        <div>
+            <a href="/">Home 🏠</a>
+            <a href="/survey">Survey 📰</a>
+        </div>
+    </div>
+
+    <div class="container1">
+        <h3>🛠️ Guidelines 🛠️</h3> 
+    </div>
+    <div class="container2">
+        <ul>
+            <li>This is a statin recommendation model based on <a href="https://papers.nips.cc/paper_files/paper/2016/hash/621bf66ddb7c962aa0d22ac97d69b793-Abstract.html">LightGBM</a> that predicts which statin will lower LDL-C below target based on clinical outcomes.</li>
+            <li>This model is <b>suitable for patients who have not received CV intervention and do not have ASCVD.</b></li>
+            <li>The result, which is the success rate (probability value), represents the likelihood of reaching the LDL-C target level when the recommended statin and dosage are administered.</li>
+            <li>The model is a tool to help make decisions about statin treatment, but <b>it does not always guarantee a perfect decision.</b></li>
+            <li> Recommendations are only made for <b>Atorvastatin, Rosuvastatin, Pitavastatin, Pravastatin, and Simvastatin.</b></li>
+            <li>Input features (total 30): 
+                <br>Age, Gender, Smoking, Drinking, Height, Weight, Diabetes mellitus, CKD, LVH at ECG,
+                <br>Systolic BP, Diastolic BP, 
+                <br>LDL-C, HDL-C, Total cholesterol, Glucose, Triglyceride, ɣ-GTP, HbA1c, BUN, Proteiuria (Mild and Moderate),
+                <br>BMI, eGFR, and SCORE2 (Calculated by algorithms based on <a href="/calculate">criteria</a>)</br>
+            </li>
+            <li>This model has undergone internal validation and two external validations, and has the following performance:</li>
+        </ul>
+    </div>  
+    
+    <div class="container3">
+        <div class="table-container1">
+            <table>
+                <tr>
+                    <th>Validation</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1-score</th>
+                    <th>AUPRC</th>
+                    <th>AUROC</th>
+                </tr>
+                <tr>
+                    <td>Internal</td>
+                    <td>0.84</td>
+                    <td>0.71</td>
+                    <td>0.58</td>
+                    <td>0.64</td>
+                    <td>0.72</td>
+                    <td>0.85</td>
+                </tr>
+                <tr>
+                    <td>External 1</td>
+                    <td>0.86</td>
+                    <td>0.68</td>
+                    <td>0.54</td>
+                    <td>0.60</td>
+                    <td>0.66</td>
+                    <td>0.83</td>
+                </tr>
+                <tr>
+                    <td>External 2</td>
+                    <td>0.85</td>
+                    <td>0.73</td>
+                    <td>0.56</td>
+                    <td>0.64</td>
+                    <td>0.69</td>
+                    <td>0.84</td>
+                </tr>
+            </table>
+        </div>  
+    </div>  
+    <hr>
+    <h3 style="text-align: center; margin-top: 30px; margin-bottom: 10px;">Statin Recommendation Results</h3>
+    <div class="table-container2">
+        <table>
+            <tr>
+                <th>Recommended Statin</th>
+                <th>Recommended Dose</th>
+                <th>Success Rate</th>
+            </tr>
+            {% for index, row in results.iterrows() %}
+            <tr>
+                <td>{{ row['Recommended Statin'] }}</td>
+                <td>{{ row['Recommended Dose'] }}</td>
+                <td>{{ row['Success Rate'] }}</td>
+            </tr>
+            {% if loop.index in [4, 6, 9, 12] %}
+            <tr>
+                <td colspan='3'><hr></td>
+            </tr>  
+            {% endif %}  
+            {% endfor %}
+        </table>
+    </div>    
+
+    <div class="button-container" style="margin-top=50px">
+        <button onclick="go_to_srs()">Try recommendation again 💊</button>
+    </div>
+
+    <script>
+        function go_to_srs() {
+            window.location.href = "/starc";
+        }
+    </script>
+</body>
+</html>
