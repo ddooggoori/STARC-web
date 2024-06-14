@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, session
 import pandas as pd
 from base import *
-import numpy as np
 from utils import *
 
 
@@ -9,12 +8,8 @@ app = Flask(__name__)
 app.secret_key = 'pengdori'
 
 
-@app.route('/')
-def home():
-    return render_template('home/home.html')
 
-
-@app.route('/starc', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def starc():
     if request.method == 'POST':
         form_data = request.form
@@ -47,13 +42,7 @@ def starc_results():
     return render_template('starc/starc_results.html', results=results)
 
 
-
-@app.route('/survey')
-def survey():
-    return render_template('survey/survey.html')
-
 if __name__ == '__main__':
     app.debug = True
     app.run()
-
 
