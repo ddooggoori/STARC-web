@@ -53,9 +53,3 @@ def starc_results():
 @app.route('/survey')
 def survey():
     return render_template('survey/survey.html')
-
-
-
-if __name__ == '__main__':
-    app.debug = True
-
