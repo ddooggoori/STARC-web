@@ -364,10 +364,11 @@
 
 <script>
     document.querySelector("form").addEventListener("submit", function(event) {
-
-        var inputs = document.querySelectorAll("input[type='text'], input[type='radio']"); 
+        // 폼을 서브밋할 때 실행되는 함수
+        var inputs = document.querySelectorAll("input[type='text'], input[type='radio']"); // 모든 텍스트 입력 필드와 라디오 버튼 가져오기
         var isValid = true;
 
+        // 각 입력 필드를 확인하여 유효성을 검사
         inputs.forEach(function(input) {
             if (input.type === "text") {
                 var value = input.value.trim();
@@ -393,6 +394,7 @@
             }
         });
 
+        // 유효하지 않은 입력이 있는 경우 폼 서브밋을 막고 경고 표시
         if (!isValid) {
             event.preventDefault();
             alert("Please fill in valid values.");
