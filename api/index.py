@@ -9,7 +9,6 @@ from utils import *
 
 
 app = Flask(__name__, template_folder=r'E:\WORKING\STARC\templates')
-app.secret_key = 'pengdori'
 
 
 @app.route('/')
@@ -51,34 +50,9 @@ def starc_results():
 
 
 
-@app.route('/similarity', methods=['GET', 'POST'])
-def similarity():
-    if request.method == 'POST':
-        # HTML 폼에서 받은 데이터 가져오기
-        drug_name = request.form['drug']
-        drug_name = drug_name.lower()
-        radius = int(request.form['radius'])
-        nBits = int(request.form['nBits'])
-
-        # utils.py의 Medication_preprocessing 함수 호출하여 결과 데이터프레임 생성
-        results = Medication_preprocessing(drug_name, radius, nBits)        
-        print(results) 
-
-        # similarity.html에 결과 데이터프레임 전달
-        return render_template('similarity/similarity.html', results=results)
-    else:
-        return render_template('similarity/similarity.html')
-
-
-
 @app.route('/survey')
 def survey():
     return render_template('survey/survey.html')
-
-
-@app.route('/calculate')
-def calculate():
-    return render_template('calculate/calculate.html')
 
 
 
