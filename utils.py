@@ -8,7 +8,7 @@ import math
 
 def Medication_preprocessing(target, radius=2, nBits=1024):
     
-    smiles = pd.read_csv(r'smiles.csv')
+    smiles = pd.read_csv(r'E:\WORKING\STARC\utils\smiles.csv')
     
     ecfp = {'Medication': [], 'ECFP': []}
     for medication in smiles['name'].unique():
@@ -180,9 +180,9 @@ def SRS_results(data):
 
     clinical_statin = pd.concat([clinical_sample, statin_sample], axis = 1)[SRS_feature]
 
-    clinical_statin = Scaling(clinical_statin, scaler = r'STARC_scaler', method = 'apply', binary = binary)
+    clinical_statin = Scaling(clinical_statin, scaler = r'E:\WORKING\STARC\utils\STARC_scaler', method = 'apply', binary = binary)
 
-    model = joblib.load(r'STARC_model.pkl')
+    model = joblib.load(r'E:\WORKING\STARC\utils\STARC_model.pkl')
     pred_proba = model.predict_proba(clinical_statin[SRS_feature].values)[:, 1] * 100
 
     predictions = pd.DataFrame(pred_proba, columns=['Success Rate'])
