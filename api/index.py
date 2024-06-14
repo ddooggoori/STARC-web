@@ -1,14 +1,12 @@
 from flask import Flask, request, render_template, redirect, url_for, session
 import pandas as pd
 from base import *
-import pandas as pd
-from rdkit import Chem
-from rdkit.Chem import AllChem
 import numpy as np
 from utils import *
 
 
-app = Flask(__name__')
+app = Flask(__name__)
+app.secret_key = 'pengdori'
 
 
 @app.route('/')
@@ -53,3 +51,4 @@ def starc_results():
 @app.route('/survey')
 def survey():
     return render_template('survey/survey.html')
+
